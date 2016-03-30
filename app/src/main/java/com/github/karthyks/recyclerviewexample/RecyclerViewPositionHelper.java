@@ -54,6 +54,13 @@ public class RecyclerViewPositionHelper {
     return null;
   }
 
+  public TextView getBottomHeaderTextView(int position) {
+    if (recyclerView.findViewHolderForAdapterPosition(position) != null) {
+      return getViewHolder(position).getTextViewBottomHeader();
+    }
+    return null;
+  }
+
   public TripListAdapter.TripViewHolder getViewHolder(int position) {
     if (recyclerView.findViewHolderForAdapterPosition(position) != null) {
       return ((TripListAdapter.TripViewHolder) recyclerView.findViewHolderForAdapterPosition
@@ -72,6 +79,39 @@ public class RecyclerViewPositionHelper {
         }
       }
     }
+  }
+
+  public void makeVisibleBottomHeader(int position) {
+    for (int i = 0; i < getItemCount(); i++) {
+      if (getBottomHeaderTextView(i) != null) {
+        if (i != position) {
+          getBottomHeaderTextView(i).setVisibility(View.INVISIBLE);
+        } else {
+          getBottomHeaderTextView(i).setVisibility(View.VISIBLE);
+        }
+      }
+    }
+  }
+
+  public void disableAllBottomHeader() {
+    for (int i = 0; i < getItemCount(); i++) {
+      if (getBottomHeaderTextView(i) != null) {
+        getBottomHeaderTextView(i).setVisibility(View.INVISIBLE);
+      }
+    }
+  }
+
+  public int getBottomHeaderStartPosition() {
+    int[] bottom = new int[2];
+    getBottomHeaderTextView(findFirstVisibleItemPosition()).getLocationOnScreen(bottom);
+    return bottom[1];
+  }
+
+  public int getBottomHeaderEndPosition() {
+    int[] bottom = new int[2];
+    getBottomHeaderTextView(findFirstVisibleItemPosition()).getLocationOnScreen(bottom);
+    bottom[1] += getBottomHeaderTextView(findFirstVisibleItemPosition()).getHeight();
+    return bottom[1];
   }
 
   public int getItemStartPosition(int position) {

@@ -16,7 +16,8 @@ public class MainActivity extends AppCompatActivity {
   private RecyclerView.LayoutManager mLayoutManager;
   private RecyclerViewPositionHelper mRecyclerViewHelper;
   private TextView textStaticHeader;
-  private int headerPosition;
+  private int headerEndPosition;
+  private int headerStartPosition;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     firstCompletelyVisibleItem = mRecyclerViewHelper.findFirstCompletelyVisibleItemPosition();
     if (y > oldY) {
       if (mRecyclerViewHelper.getItemStartPosition(firstCompletelyVisibleItem)
-          <= headerPosition) {
+          <= headerStartPosition) {
         textStaticHeader.setText(mRecyclerViewHelper.getHeaderText(
             firstCompletelyVisibleItem));
         mRecyclerViewHelper.makeInvisible(firstCompletelyVisibleItem);
@@ -68,24 +69,40 @@ public class MainActivity extends AppCompatActivity {
         textStaticHeader.setText(mRecyclerViewHelper.getHeaderText(firstVisibleItem));
         mRecyclerViewHelper.makeInvisible(firstVisibleItem);
       }
+      if (mRecyclerViewHelper.getBottomHeaderEndPosition() <= headerEndPosition &&
+          mRecyclerViewHelper.getBottomHeaderEndPosition() >= headerStartPosition) {
+        mRecyclerViewHelper.makeVisibleBottomHeader(firstVisibleItem);
+        textStaticHeader.setVisibility(View.INVISIBLE);
+      } else {
+        mRecyclerViewHelper.disableAllBottomHeader();
+        textStaticHeader.setVisibility(View.VISIBLE);
+      }
     } else {
-      if (mRecyclerViewHelper.getItemEndPosition(firstVisibleItem) >= headerPosition) {
+      if (mRecyclerViewHelper.getItemEndPosition(firstVisibleItem) >= headerEndPosition) {
         textStaticHeader.setText(mRecyclerViewHelper.getHeaderText(firstVisibleItem));
         mRecyclerViewHelper.makeInvisible(firstVisibleItem);
       }
+      mRecyclerViewHelper.disableAllBottomHeader();
     }
   }
 
-  private void getHeaderPosition() {
+  private void getHeaderEndPosition() {
     int[] pos = new int[2];
     textStaticHeader.getLocationOnScreen(pos);
     pos[1] += textStaticHeader.getHeight();
-    headerPosition = pos[1];
-    Log.d(TAG, "getHeaderPosition: " + headerPosition);
+    headerEndPosition = pos[1];
+    Log.d(TAG, "getHeaderEndPosition: " + headerEndPosition);
+  }
+
+  private void getHeaderStartPosition() {
+    int[] pos = new int[2];
+    textStaticHeader.getLocationOnScreen(pos);
+    headerStartPosition = pos[1];
+    Log.d(TAG, "getHeaderEndPosition: " + headerStartPosition);
   }
 
   @Override public void onWindowFocusChanged(boolean hasFocus) {
     super.onWindowFocusChanged(hasFocus);
-    getHeaderPosition();
+    getHeaderEndPosition();
   }
 }

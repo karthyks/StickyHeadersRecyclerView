@@ -25,6 +25,7 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.TripVi
 
   @Override public void onBindViewHolder(TripViewHolder holder, int position) {
     holder.textViewHeader.setText(headerList.get(position));
+    holder.textViewBottomHeader.setText(headerList.get(position));
   }
 
   @Override public int getItemCount() {
@@ -34,13 +35,20 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.TripVi
   public static class TripViewHolder extends RecyclerView.ViewHolder {
 
     private TextView textViewHeader;
+    private TextView textViewBottomHeader;
+
     public TripViewHolder(View itemView) {
       super(itemView);
       textViewHeader = (TextView) itemView.findViewById(R.id.txt_header);
+      textViewBottomHeader = (TextView) itemView.findViewById(R.id.txt_header_bottom);
     }
 
     public TextView getTextViewHeader() {
       return textViewHeader;
+    }
+
+    public TextView getTextViewBottomHeader() {
+      return textViewBottomHeader;
     }
   }
 
