@@ -69,7 +69,11 @@ public class RecyclerViewPositionHelper {
     return null;
   }
 
-  public void makeInvisible(int position) {
+  public void makeHeaderVisible(int position) {
+    getHeaderTextView(position).setVisibility(View.VISIBLE);
+  }
+
+  public void makeHeaderInvisible(int position) {
     for (int i = 0; i < getItemCount(); i++) {
       if (getHeaderTextView(i) != null) {
         if (i != position) {

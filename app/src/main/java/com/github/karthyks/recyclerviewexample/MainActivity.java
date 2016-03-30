@@ -64,10 +64,10 @@ public class MainActivity extends AppCompatActivity {
           <= headerStartPosition) {
         textStaticHeader.setText(mRecyclerViewHelper.getHeaderText(
             firstCompletelyVisibleItem));
-        mRecyclerViewHelper.makeInvisible(firstCompletelyVisibleItem);
+        mRecyclerViewHelper.makeHeaderInvisible(firstCompletelyVisibleItem);
       } else {
         textStaticHeader.setText(mRecyclerViewHelper.getHeaderText(firstVisibleItem));
-        mRecyclerViewHelper.makeInvisible(firstVisibleItem);
+        mRecyclerViewHelper.makeHeaderInvisible(firstVisibleItem);
       }
       if (mRecyclerViewHelper.getBottomHeaderEndPosition() <= headerEndPosition &&
           mRecyclerViewHelper.getBottomHeaderEndPosition() >= headerStartPosition) {
@@ -78,9 +78,9 @@ public class MainActivity extends AppCompatActivity {
         textStaticHeader.setVisibility(View.VISIBLE);
       }
     } else {
-      if (mRecyclerViewHelper.getItemEndPosition(firstVisibleItem) >= headerEndPosition) {
-        textStaticHeader.setText(mRecyclerViewHelper.getHeaderText(firstVisibleItem));
-        mRecyclerViewHelper.makeInvisible(firstVisibleItem);
+      if(mRecyclerViewHelper.getBottomHeaderStartPosition() >= headerEndPosition) {
+        mRecyclerViewHelper.makeHeaderVisible(firstVisibleItem);
+        textStaticHeader.setVisibility(View.INVISIBLE);
       }
       mRecyclerViewHelper.disableAllBottomHeader();
     }
