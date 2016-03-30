@@ -34,23 +34,29 @@ public class MainActivity extends AppCompatActivity {
     recyclerView.setAdapter(new TripListAdapter(TripListAdapter.getListHeaders()));
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-        int firstVisibleItem, visibleItemCount, totalItemCount;
+        int firstVisibleItem, firstCompletelyVisibleItem;
 
         @Override public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX,
                                              int oldScrollY) {
           mRecyclerViewHelper = RecyclerViewPositionHelper.createHelper(recyclerView);
-          visibleItemCount = recyclerView.getChildCount();
-          totalItemCount = mRecyclerViewHelper.getItemCount();
           firstVisibleItem = mRecyclerViewHelper.findFirstVisibleItemPosition();
-          Log.d(TAG, "onScrolled: first visible : " + firstVisibleItem);
-          firstVisibleItem = mRecyclerViewHelper.findFirstCompletelyVisibleItemPosition();
-          Log.d(TAG, "onScrolled: first completely visible : " + firstVisibleItem);
+          firstCompletelyVisibleItem = mRecyclerViewHelper.findFirstCompletelyVisibleItemPosition();
           if (scrollY > oldScrollY) {
-            Log.d(TAG, "onScrolled: Up");
+            if (mRecyclerViewHelper.getItemStartPosition(firstCompletelyVisibleItem)
+                <= headerPosition) {
+              textStaticHeader.setText(mRecyclerViewHelper.getHeaderText(
+                  firstCompletelyVisibleItem));
+              mRecyclerViewHelper.makeInvisible(firstCompletelyVisibleItem);
+            } else {
+              textStaticHeader.setText(mRecyclerViewHelper.getHeaderText(firstVisibleItem));
+              mRecyclerViewHelper.makeInvisible(firstVisibleItem);
+            }
           } else {
-            Log.d(TAG, "onScrolled: Down");
+            if (mRecyclerViewHelper.getItemEndPosition(firstVisibleItem) >= headerPosition) {
+              textStaticHeader.setText(mRecyclerViewHelper.getHeaderText(firstVisibleItem));
+              mRecyclerViewHelper.makeInvisible(firstVisibleItem);
+            }
           }
-
         }
       });
     } else {
