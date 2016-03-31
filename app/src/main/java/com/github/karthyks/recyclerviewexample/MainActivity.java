@@ -1,6 +1,5 @@
 package com.github.karthyks.recyclerviewexample;
 
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,10 +32,6 @@ public class MainActivity extends AppCompatActivity {
     mLayoutManager = new LinearLayoutManager(this);
     recyclerView.setLayoutManager(mLayoutManager);
     recyclerView.setAdapter(new TripListAdapter(TripListAdapter.getListHeaders()));
-    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-      textStaticHeader.setVisibility(View.INVISIBLE);
-      return;
-    }
     textStaticHeader.setVisibility(View.VISIBLE);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
@@ -65,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
     firstVisibleItem = mRecyclerViewHelper.findFirstVisibleItemPosition();
     firstCompletelyVisibleItem = mRecyclerViewHelper.findFirstCompletelyVisibleItemPosition();
     if (y > oldY) {
+      if (firstCompletelyVisibleItem == -1) {
+        firstCompletelyVisibleItem = firstVisibleItem;
+      }
       if (mRecyclerViewHelper.getItemStartPosition(firstCompletelyVisibleItem)
           <= headerStartPosition) {
         textStaticHeader.setText(mRecyclerViewHelper.getHeaderText(

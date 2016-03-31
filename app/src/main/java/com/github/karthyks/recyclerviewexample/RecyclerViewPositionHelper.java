@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 public class RecyclerViewPositionHelper {
 
+  private static final String TAG = RecyclerViewPositionHelper.class.getSimpleName();
   final RecyclerView recyclerView;
   final RecyclerView.LayoutManager layoutManager;
 
