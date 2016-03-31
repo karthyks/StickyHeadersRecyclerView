@@ -81,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
         textStaticHeader.setVisibility(View.VISIBLE);
       }
     } else {
+      if (firstCompletelyVisibleItem == -1) {
+        firstCompletelyVisibleItem = firstVisibleItem + 1;
+      }
       if (headerEndPosition <= mRecyclerViewHelper.getTopHeaderStartPosition(firstVisibleItem)) {
         textStaticHeader.setVisibility(View.INVISIBLE);
       }
