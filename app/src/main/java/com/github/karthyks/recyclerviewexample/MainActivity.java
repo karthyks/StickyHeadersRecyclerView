@@ -1,11 +1,11 @@
 package com.github.karthyks.recyclerviewexample;
 
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -33,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
     mLayoutManager = new LinearLayoutManager(this);
     recyclerView.setLayoutManager(mLayoutManager);
     recyclerView.setAdapter(new TripListAdapter(TripListAdapter.getListHeaders()));
+    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+      textStaticHeader.setVisibility(View.INVISIBLE);
+      return;
+    }
+    textStaticHeader.setVisibility(View.VISIBLE);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
         @Override public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX,
@@ -78,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         textStaticHeader.setVisibility(View.VISIBLE);
       }
     } else {
-      if(mRecyclerViewHelper.getBottomHeaderStartPosition() >= headerEndPosition) {
+      if (mRecyclerViewHelper.getBottomHeaderStartPosition() >= headerEndPosition) {
         mRecyclerViewHelper.makeHeaderVisible(firstVisibleItem);
         textStaticHeader.setVisibility(View.INVISIBLE);
       }
@@ -91,14 +96,12 @@ public class MainActivity extends AppCompatActivity {
     textStaticHeader.getLocationOnScreen(pos);
     pos[1] += textStaticHeader.getHeight();
     headerEndPosition = pos[1];
-    Log.d(TAG, "getHeaderEndPosition: " + headerEndPosition);
   }
 
   private void getHeaderStartPosition() {
     int[] pos = new int[2];
     textStaticHeader.getLocationOnScreen(pos);
     headerStartPosition = pos[1];
-    Log.d(TAG, "getHeaderEndPosition: " + headerStartPosition);
   }
 
   @Override public void onWindowFocusChanged(boolean hasFocus) {
