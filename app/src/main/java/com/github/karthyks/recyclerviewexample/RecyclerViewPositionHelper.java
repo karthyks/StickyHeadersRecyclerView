@@ -106,6 +106,19 @@ public class RecyclerViewPositionHelper {
     }
   }
 
+  public int getTopHeaderStartPosition(int pos) {
+    int[] top = new int[2];
+    getHeaderTextView(pos).getLocationOnScreen(top);
+    return top[1];
+  }
+
+  public int getTopHeaderEndPosition(int pos) {
+    int[] top = new int[2];
+    getHeaderTextView(pos).getLocationOnScreen(top);
+    top[1] += getHeaderTextView(pos).getHeight();
+    return top[1];
+  }
+
   public int getBottomHeaderStartPosition() {
     int[] bottom = new int[2];
     getBottomHeaderTextView(findFirstVisibleItemPosition()).getLocationOnScreen(bottom);

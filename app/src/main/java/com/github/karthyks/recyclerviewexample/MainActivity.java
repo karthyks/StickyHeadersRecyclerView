@@ -81,11 +81,28 @@ public class MainActivity extends AppCompatActivity {
         textStaticHeader.setVisibility(View.VISIBLE);
       }
     } else {
-      if (mRecyclerViewHelper.getBottomHeaderStartPosition() >= headerEndPosition) {
-        mRecyclerViewHelper.makeHeaderVisible(firstVisibleItem);
+      if (headerEndPosition <= mRecyclerViewHelper.getTopHeaderStartPosition(firstVisibleItem)) {
         textStaticHeader.setVisibility(View.INVISIBLE);
       }
-      mRecyclerViewHelper.disableAllBottomHeader();
+
+      if (mRecyclerViewHelper.getTopHeaderStartPosition(firstCompletelyVisibleItem) >=
+          headerEndPosition) {
+        mRecyclerViewHelper.makeHeaderInvisible(firstVisibleItem);
+      } else {
+        textStaticHeader.setVisibility(View.INVISIBLE);
+        mRecyclerViewHelper.makeHeaderVisible(firstCompletelyVisibleItem);
+      }
+
+      if (mRecyclerViewHelper.getHeaderTextView(firstCompletelyVisibleItem).getVisibility() ==
+          View.VISIBLE && (firstCompletelyVisibleItem - 1) > 0) {
+        mRecyclerViewHelper.makeVisibleBottomHeader(firstCompletelyVisibleItem - 1);
+      }
+
+      if (mRecyclerViewHelper.getBottomHeaderEndPosition() >= headerEndPosition) {
+        mRecyclerViewHelper.disableAllBottomHeader();
+        textStaticHeader.setText(mRecyclerViewHelper.getHeaderText(firstVisibleItem));
+        textStaticHeader.setVisibility(View.VISIBLE);
+      }
     }
   }
 
